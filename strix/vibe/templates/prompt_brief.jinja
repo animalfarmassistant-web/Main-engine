@@ -1,0 +1,34 @@
+{#- Deterministic prompt brief. All display lines and tool-specific phrasing are
+    precomputed in builder.py and passed in, so this template is a plain skeleton
+    (no whitespace-control surprises, ASCII only). -#}
+# Task brief for {{ tool_label }}
+
+## Role
+You are an expert software engineer working in the **{{ project_name }}** codebase.
+{{ role_text }}
+
+## Objective
+{{ intent }}
+
+## Context map
+{% if file_lines %}Relevant files:
+{% for line in file_lines %}{{ line }}
+{% endfor %}{% else %}_No files were matched in the project index for this objective - treat the codebase as unfamiliar and ask for the entry points you need._
+{% endif %}{% if symbol_lines %}
+Relevant symbols:
+{% for line in symbol_lines %}{{ line }}
+{% endfor %}{% endif %}{% if memory_lines %}
+## Project state (from prior sessions)
+{% for line in memory_lines %}{{ line }}
+{% endfor %}{% endif %}
+## Constraints
+{% for line in constraint_lines %}{{ line }}
+{% endfor %}
+
+## Acceptance criteria
+- The objective is fully implemented and the code compiles / runs.
+- New behaviour is covered by tests consistent with the project's existing test style.
+- No unrelated files are modified.
+
+## Output format
+{{ output_text }}
